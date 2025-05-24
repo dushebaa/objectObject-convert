@@ -38,7 +38,7 @@ export async function getFileStatus(fileId: string, token: string) {
     params: { header: { Authorization: token }, path: { file_id: fileId } },
   })
   if (error) throw error
-  return data as { status: 'processing' | 'completed' | 'error'; message?: string }
+  return data as { status: 'pending' | 'processing' | 'finished' | 'error'; message?: string }
 }
 
 export async function downloadFile(fileId: string, token: string) {

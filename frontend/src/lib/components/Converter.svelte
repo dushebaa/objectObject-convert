@@ -8,7 +8,7 @@
   let errorMessage = $state<string | null>(null)
   let fileId = $state<string | null>(null)
 
-  const formats = ['PDF', 'DOCX', 'TXT']
+  const formats = ['MP4', 'AVI', 'MKV']
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement
@@ -34,7 +34,7 @@
       try {
         if (!fileId || !$token) throw new Error('File ID is not set')
         const data = await getFileStatus(fileId, $token)
-        if (data.status === 'completed') {
+        if (data.status === 'finished') {
           status = 'completed'
           clearInterval(interval)
         } else if (data.status === 'error') {
@@ -76,6 +76,7 @@
   </button>
   <input
     type="file"
+    accept=".mp4,.avi,.mkv"
     onchange={handleFileChange}
     class="mb-2"
   />
