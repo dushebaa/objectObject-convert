@@ -6,7 +6,7 @@
   $: isLoggedIn = $token !== null
 </script>
 
-<main class="p-4">
+<main>
   {#if isLoggedIn}
     <Converter />
   {:else}

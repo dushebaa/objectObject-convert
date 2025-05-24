@@ -15,7 +15,6 @@ export async function signup(username: string, password: string) {
   const { data, error } = await client.POST('/auth/signup', {
     body: { username, password },
   })
-  console.log(data)
   if (error) throw new Error('Signup failed')
   return (data as { token: string }).token
 }
@@ -26,6 +25,7 @@ export async function processFile(file: File, outputFormat: string, token: strin
   formData.append('output_format', outputFormat)
 
   const { data, error } = await client.POST('/files/process', {
+    // @ts-ignore
     body: formData,
     headers: { Authorization: token },
   })
@@ -41,7 +41,7 @@ export async function getFileStatus(fileId: string, token: string) {
   return data as { status: 'pending' | 'processing' | 'finished' | 'error'; message?: string }
 }
 
-export async function downloadFile(fileId: string, token: string, outputFormat: string) {
+export async function downloadFile(fileId: string, token: string, filename: string, outputFormat: string) {
   const response = await fetch(`http://127.0.0.1:8000/files/${fileId}/download/`, {
     headers: { Authorization: token },
   })
@@ -52,8 +52,9 @@ export async function downloadFile(fileId: string, token: string, outputFormat: 
   const blob = await response.blob()
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
+  const filenameClean = filename.split('.').slice(0,-1).join('.')
+  a.download = `${filenameClean}.${outputFormat.toLowerCase()}`
   a.href = url
-  a.download = `converted_file.${outputFormat.toLowerCase()}`
   document.body.appendChild(a)
   a.click()
   a.remove()

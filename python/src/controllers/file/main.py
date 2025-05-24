@@ -67,7 +67,11 @@ async def process_file(
         exchange="",
         routing_key="file_tasks",
         body=json.dumps(
-            {"file_id": file_id, "file_path": file_path, "output_format": output_format_lower}
+            {
+                "file_id": file_id,
+                "file_path": file_path,
+                "output_format": output_format_lower,
+            }
         ),
     )
     rabbitmq_conn.close()
@@ -95,11 +99,10 @@ async def download_file(
                     status_code=400, detail="File has not been processed"
                 )
 
-            file_path = os.path.join(
-                STORAGE_PATH, "converted", f"{file_id}.{file['output_format']}"
-            )
+            converted_file_name = f"{file_id}.{file['output_format']}"
+            file_path = os.path.join(STORAGE_PATH, "converted", converted_file_name)
             if os.path.exists(file_path):
-                return FileResponse(file_path, filename=file["filename"])
+                return FileResponse(file_path, filename=converted_file_name)
             raise HTTPException(status_code=404, detail="File not found on disk")
 
 
