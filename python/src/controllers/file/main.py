@@ -39,6 +39,7 @@ async def process_file(
     file_id = str(uuid.uuid4())
     file_path = os.path.join(STORAGE_PATH, file_id)
     user = verify_token(Authorization)
+    output_format_lower = output_format.lower()
 
     # Save file to local filesystem
     with open(file_path, "wb") as f:
@@ -53,7 +54,7 @@ async def process_file(
                 file.filename,
                 user["user_id"],
                 FileStatus.PENDING,
-                output_format,
+                output_format_lower,
             )
 
     # Push task to RabbitMQ
@@ -66,7 +67,7 @@ async def process_file(
         exchange="",
         routing_key="file_tasks",
         body=json.dumps(
-            {"file_id": file_id, "file_path": file_path, "output_format": output_format}
+            {"file_id": file_id, "file_path": file_path, "output_format": output_format_lower}
         ),
     )
     rabbitmq_conn.close()
