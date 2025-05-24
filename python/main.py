@@ -15,9 +15,17 @@ from src.services.file_processor import start_rabbitmq_consumer, rabbitmq_conn, 
 import src.controllers.auth.main  # noqa: E402
 import src.controllers.file.main  # noqa: E402
 
-app = FastAPI(middleware=[
-    Middleware(CORSMiddleware, allow_origins=["*"])
-])
+app = FastAPI(
+    middleware=[
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+    ]
+)
 
 app.include_router(src.controllers.auth.main.router)
 app.include_router(src.controllers.file.main.router)
