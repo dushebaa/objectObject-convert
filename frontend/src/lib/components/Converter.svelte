@@ -4,11 +4,11 @@
 
   let file = $state<File | null>(null)
   let outputFormat = $state<string>('')
-  let status = $state<'idle' | 'uploading' | 'processing' | 'completed' | 'error'>('idle')
+  let status = $state<'idle' | 'uploading' | 'processing' | 'finished' | 'error'>('idle')
   let errorMessage = $state<string | null>(null)
   let fileId = $state<string | null>(null)
 
-  const formats = ['MP4', 'AVI', 'MKV']
+  const formats = ['MP4', 'AVI', 'MKV', 'MOV']
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement
@@ -35,7 +35,7 @@
         if (!fileId || !$token) throw new Error('File ID is not set')
         const data = await getFileStatus(fileId, $token)
         if (data.status === 'finished') {
-          status = 'completed'
+          status = 'finished'
           clearInterval(interval)
         } else if (data.status === 'error') {
           status = 'error'
@@ -53,7 +53,7 @@
   async function handleDownload() {
     if (!fileId || !$token) return
     try {
-      await downloadFile(fileId, $token)
+      await downloadFile(fileId, $token, outputFormat)
     } catch {
       status = 'error'
       errorMessage = 'Ошибка скачивания'
@@ -100,7 +100,7 @@
     <p class="mt-2">Загрузка...</p>
   {:else if status === 'processing'}
     <p class="mt-2">Обработка...</p>
-  {:else if status === 'completed'}
+  {:else if status === 'finished'}
     <p class="mt-2">Готово!</p>
     <button
       onclick={handleDownload}

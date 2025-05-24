@@ -41,7 +41,7 @@ export async function getFileStatus(fileId: string, token: string) {
   return data as { status: 'pending' | 'processing' | 'finished' | 'error'; message?: string }
 }
 
-export async function downloadFile(fileId: string, token: string) {
+export async function downloadFile(fileId: string, token: string, outputFormat: string) {
   const response = await fetch(`http://127.0.0.1:8000/files/${fileId}/download/`, {
     headers: { Authorization: token },
   })
@@ -53,7 +53,7 @@ export async function downloadFile(fileId: string, token: string) {
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'converted_file'
+  a.download = `converted_file.${outputFormat.toLowerCase()}`
   document.body.appendChild(a)
   a.click()
   a.remove()
