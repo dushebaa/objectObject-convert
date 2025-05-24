@@ -12,10 +12,13 @@
       const newToken = await (isRegisterMode
         ? signup(username, password)
         : login(username, password))
-      console.log(newToken)
-      token.set(newToken)
-      localStorage.setItem('token', newToken)
-      errorMessage = ''
+      if (!isRegisterMode) {
+        token.set(newToken)
+        localStorage.setItem('token', newToken)
+        errorMessage = ''
+      } else {
+        isRegisterMode = !isRegisterMode
+      }
     } catch {
       errorMessage = isRegisterMode ? 'Ошибка регистрации' : 'Ошибка входа'
     }
