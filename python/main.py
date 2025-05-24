@@ -1,6 +1,8 @@
 import os
 import threading
 from fastapi import FastAPI
+from starlette.middleware import Middleware
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
@@ -13,7 +15,10 @@ from src.services.file_processor import start_rabbitmq_consumer, rabbitmq_conn, 
 import src.controllers.auth.main  # noqa: E402
 import src.controllers.file.main  # noqa: E402
 
-app = FastAPI()
+app = FastAPI(middleware=[
+    Middleware(CORSMiddleware, allow_origins=["*"])
+])
+
 app.include_router(src.controllers.auth.main.router)
 app.include_router(src.controllers.file.main.router)
 
