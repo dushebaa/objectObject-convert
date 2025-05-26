@@ -11,7 +11,9 @@
   const videoFormats = ['mp4', 'avi', 'mkv', 'mov', 'flv', 'av1', 'webm', 'hevc']
   const imageFormats = ['png', 'jpeg', 'webp', 'jpg', 'gif', 'tiff', 'heif']
   const audioForamts = ['wav', 'mp3', 'flac', 'ogg', 'aac', 'aiff']
-  const acceptedFormats = [...videoFormats, ...imageFormats, ...audioForamts].map(format => `.${format}`).join(',')
+  const acceptedFormats = [...videoFormats, ...imageFormats, ...audioForamts]
+    .map((format) => `.${format}`)
+    .join(',')
 
   function handleFileChange(event: Event) {
     const input = event.target as HTMLInputElement
@@ -68,14 +70,14 @@
   }
 
   function getOutputOptions() {
-    const fileExtension = file?.name.split('.').at(-1);
-    if (!fileExtension) return [];
+    const fileExtension = file?.name.split('.').at(-1)
+    if (!fileExtension) return []
     for (const format of [videoFormats, imageFormats, audioForamts]) {
       if (format.includes(fileExtension)) {
-        return format.filter(fm => fm !== fileExtension);
+        return format.filter((fm) => fm !== fileExtension)
       }
     }
-    return [];
+    return []
   }
 </script>
 
