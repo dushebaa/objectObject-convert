@@ -6,4 +6,3 @@ pyjwt
 redis
 sqlalchemy
 alembic
-psycopg2

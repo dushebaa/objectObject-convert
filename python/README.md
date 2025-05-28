@@ -29,3 +29,11 @@ or if you're a fancy docker user mf:
 docker build --tag "cloudvault_python" .
 docker run cloudvault_python
 ```
+
+## database migration
+
+Set `sqlalchemy.url` in `alembic.ini` to your postgres connection string
+
+```bash
+alembic upgrade head
+```

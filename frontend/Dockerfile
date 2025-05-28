@@ -11,6 +11,7 @@ RUN pnpm install
 COPY . .
 RUN pnpm build
 
+ENV PORT 4173
 EXPOSE 4173
 
 CMD [ "npm", "run", "preview:host" ]
